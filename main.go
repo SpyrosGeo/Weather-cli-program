@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-type WeatherData struct {
+type Response struct {
 	GenerationtimeMs float64 `json:"generationtime_ms"`
 	HourlyUnits      struct {
 		Time          string `json:"time"`
@@ -34,7 +36,12 @@ func main() {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
-	log.Println(string(body))
-	// err = json.Unmarshal(body, &f)
-
+	var result Response
+	if err := json.Unmarshal(body, &result); err != nil {
+		fmt.Println("Can not unmarshal JSON")
+	}
+	for _, rec := range result.Hourly {
+		return
+		// fmt.Println(rec.)
+	}
 }
